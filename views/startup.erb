@@ -1,0 +1,10 @@
+<div class="first_run_form success">
+<h3>Engines setup</h3>
+<h4>System starting</h4>
+<p>Setup information was successfully submitted.</p>
+<p>Please wait for the system to start.</p>
+<p><small>Current system status: <span id="system_status"><%= @system_status %></span></small></p>
+</div>
+<script>
+setTimeout(function(){ location.href = '/startup' ; }, 5000);
+</script>

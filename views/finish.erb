@@ -1,15 +1,11 @@
 <div class="first_run_form success">
-<h3>Engines setup</h3>
-<h4>Success</h4>
-<p>Setup information was successfully submitted.</p>
-<p>Please wait for the system to start.</p>
-<p>Current system status: <span id="system_status"><%= @system_status %></span></p>
-<% if @system_status == 'running' %>
-  <a href="<%= @system_url %>">Open Engines management</a>
-<% end %>
+  <h3>Engines setup</h3>
+  <h4>Opening system</h4>
+  <p>The Engines system has started.</p>
+  <p>Please wait for the Engines system GUI to open.</p>
+  <p><small>System GUI URL: <%= @system_url %></small></p>
+  <p><small>Current system status: <span id="system_status"><%= @system_status %></span></small></p>
 </div>
 <script>
-if (document.getElementById("system_status").innerHTML !== 'running') {
-  setTimeout(function(){ location.reload(); }, 5000);
-};
+setTimeout(function(){ window.location.href="<%= @system_url %>"; }, 1000);
 </script>
