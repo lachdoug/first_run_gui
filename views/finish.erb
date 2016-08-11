@@ -1,11 +1,33 @@
 <div class="first_run_form success">
   <h3>Engines setup</h3>
-  <h4>Opening system</h4>
-  <p>The Engines system has started.</p>
-  <p>Please wait for the Engines system GUI to open.</p>
-  <p><small>System GUI URL: <%= @system_url %></small></p>
-  <p><small>Current system status: <span id="system_status"><%= @system_status %></span></small></p>
+
+  <div id="closing_first_run_message">
+    <h4>Closing setup</h4>
+  </div>
+
+  <div id="starting_system_message">
+    <h4>Opening system</h4>
+    <p><small>System GUI URL: <%= @system_url %></small></p>
+  </div>
 </div>
 <script>
-setTimeout(function(){ window.location.href="<%= @system_url %>"; }, 1000);
+document.getElementById("starting_system_message").style.display = 'none';
+var ajax_request = new XMLHttpRequest();
+ajax_request.open('GET', '/close', true);
+ajax_request.onreadystatechange = function () {
+  if (ajax_request.readyState == 4) {
+    if (ajax_request.status == 200) {
+      setTimeout(function() {
+        document.getElementById("closing_first_run_message").style.display = 'none';
+        document.getElementById("starting_system_message").style.display = 'block';
+        setTimeout(function() {
+          window.location.href="<%= @system_url %>";
+        }, 1000);
+      }, 2000);
+    } else {
+      alert('Error: failed to close first run.'); // An error occurred during the ajax_request.
+    }
+  };
+};
+ajax_request.send();
 </script>

@@ -1,4 +1,5 @@
 <div class="first_run_form">
+<button type="button" id="toggle_hints">?</button>
 <h3>Engines setup</h3>
 <form action="/submit" method="post">
 
@@ -19,7 +20,13 @@
   <div class="field_group">
     <label>Hostname</label><br>
     <input name="hostname" placeholder="hostname" required><br>
-    <hint></hint>
+    <hint>The hostname used by the base OS.</hint>
+  </div>
+
+  <div class="field_group">
+    <input name="local_mgmt" type="checkbox">
+    <label>Install Engines management GUI</label><br>
+    <hint>If you don't install a GUI, you can manage this system using engines.org.</hint>
   </div>
 
   <legend>Networking</legend>
@@ -391,5 +398,22 @@ var validate_passwords_match = function() {
 
 document.getElementById("input_admin_password").addEventListener("change", function() { validate_passwords_match(); });
 document.getElementById("input_admin_password_confirmation").addEventListener("change", function() { validate_passwords_match(); });
+
+var hints_hidden = function() {
+  return window.getComputedStyle(document.getElementsByTagName('hint')[0], null).display == 'none';
+};
+
+var set_hints_display = function(display_state) {
+  var hints = document.getElementsByTagName('hint')
+  for (var i = 0; i < hints.length; i++) {
+    hints[i].style.display = display_state;
+  };
+};
+
+document.getElementById("toggle_hints").addEventListener("click", function() {
+  if (hints_hidden()) { set_hints_display('block') } else { set_hints_display('none') };
+});
+
+
 
 </script>
