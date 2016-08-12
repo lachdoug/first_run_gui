@@ -1,7 +1,7 @@
 <div class="first_run_form success">
   <h3>Engines setup</h3>
 
-  <div id="clompleting_first_run_message">
+  <div id="completing_first_run_message">
     <h4>Preparing system</h4>
     <p>Please wait...</p>
   </div>
@@ -9,8 +9,25 @@
   <div id="starting_system_message" style="display: none;">
     <h4>Building system</h4>
     <p>The Engines system is building. This normally takes a few minutes.</p>
-    <p>Once the build is complete, the Engines management interface will be available at <a href="<%= @mgmt_url %>" target="<%= @mgmt_url %>"><%= @mgmt_url %></a>.</p>
+    <% if @local_mgmt == 'true' %>
+      <p>Once the build is complete, the Engines management GUI will be available at:<br> <a href="<%= @mgmt_url %>" target="<%= @mgmt_url %>"><%= @mgmt_url %></a>.</p>
+      <p>The Engines system will generate a security certificate. Please accept/trust the certificate when asked to do so. You may upload your own certificate once the Engines system is running.</p>
+    <% else %>
+      <p>You can manage this Engines system from a terminal, or you can connect it to an Engines management GUI running on another Engines system.</p>
+      <p>To connect this sytem to another Engines management GUI, please identify this system using its URL:<br>
+        <code><%= @mgmt_url %></code><br>
+      </p>
+      <p>For terminal access, please login as engines, using <code>sudo su -l engines</code>.</p>
+      <p>Depending on your installation, you may need to login as another user first. For example, at AWS:<br>
+        <code>ssh -i key ubuntu@ip.address<br>sudo su -l engines</code>
+      </p>
+      <p>See the
+        <a href="http://tiki.prod.engines.org/tiki-index.php?page=Command%20Line"
+        target="http://tiki.prod.engines.org/tiki-index.php?page=Command%20Line">
+        Engines wiki</a> for more information on using the command line.</p>
+    <% end %>
   </div>
+
 </div>
 
 <script>
@@ -39,7 +56,7 @@ var postCloseFirstRun = function() {
     '<%= @api_url %>/v0/unauthenticated/bootstrap/first_run/complete',
     function() {
     setTimeout(function() {
-      document.getElementById("clompleting_first_run_message").style.display = 'none';
+      document.getElementById("completing_first_run_message").style.display = 'none';
       document.getElementById("starting_system_message").style.display = 'block';
     }, 2000);
   }, function() {

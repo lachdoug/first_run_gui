@@ -8,13 +8,14 @@ end
 
 post '/submit' do
   if post_first_run_params(params)
-    redirect '/complete'
+    redirect "/complete?local=#{params['local_mgmt'] == 'on'}"
   else
     erb :error, layout: :layout
   end
 end
 
 get '/complete' do
+  @local_mgmt = params['local_mgmt']
   @api_url = api_url
   @mgmt_url = mgmt_url
   erb :complete, layout: :layout
