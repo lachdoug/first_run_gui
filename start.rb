@@ -8,45 +8,16 @@ end
 
 post '/submit' do
   if post_first_run_params(params)
-    redirect '/startup'
+    redirect '/complete'
   else
     erb :error, layout: :layout
   end
 end
 
-get '/startup' do
-  @system_status = system_status
-  if @system_status == 'running'
-    @system_status = system_status
-    @system_url = system_url
-    erb :finish, layout: :layout
-  else
-    erb :startup, layout: :layout
-  end
-end
-
-get '/close' do
-  if post_close_first_run
-    body 'Succesfully posted close first run.'
-    status 200
-  else
-    body 'Failed to post close first run.'
-    status 404
-  end
-end
-
-def system_status
-  RestClient.get( "#{api_url}/v0/unauthenticated/bootstrap/mgmt/state" )
-rescue => e
-  log "System status error: #{e.inspect}"
-  'Error'
-end
-
-def system_url
-  RestClient.get( "#{api_url}/v0/unauthenticated/bootstrap/mgmt/url" )
-rescue => e
-  log "System URL error:  #{e.inspect}"
-  nil
+get '/complete' do
+  @api_url = api_url
+  @mgmt_url = mgmt_url
+  erb :complete, layout: :layout
 end
 
 def post_first_run_params(params)
@@ -59,14 +30,11 @@ rescue => e
   false
 end
 
-def post_close_first_run
-  log "Post close first run to #{api_url}/v0/unauthenticated/bootstrap/first_run/complete"
-  result = RestClient.post( "#{api_url}/v0/unauthenticated/bootstrap/first_run/complete", '{}' ) == 'true'
-  log "Close first run result: #{result}"
-  result
+def mgmt_url
+  RestClient.get( "#{api_url}/v0/unauthenticated/bootstrap/mgmt/url" )
 rescue => e
-  log "Close first run error: #{e.inspect}. #{e.backtrace}"
-  false
+  log "System URL error:  #{e.inspect}"
+  'Error getting mgmt URL.'
 end
 
 def api_url
