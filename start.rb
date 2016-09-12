@@ -8,7 +8,7 @@ end
 
 post '/submit' do
   if post_first_run_params(params)
-    redirect "/complete?local=#{params['local_mgmt'] == 'on'}"
+    redirect "/complete?local_mgmt=#{params['local_mgmt'] == 'on'}"
   else
     erb :error, layout: :layout
   end
@@ -32,7 +32,10 @@ rescue => e
 end
 
 def mgmt_url
-  RestClient.get( "#{api_url}/v0/unauthenticated/bootstrap/mgmt/url" )
+  log "Get mgmt_url from #{api_url}/v0/unauthenticated/bootstrap/mgmt/url with no api_vars"
+  result = RestClient.get( "#{api_url}/v0/unauthenticated/bootstrap/mgmt/url" )
+  log "Get mgmt_url result: #{result}"
+  result
 rescue => e
   log "System URL error:  #{e.inspect}"
   'Error getting mgmt URL.'
