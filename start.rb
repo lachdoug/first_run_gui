@@ -32,7 +32,7 @@ rescue => e
 end
 
 def mgmt_url
-  log "Get mgmt_url from #{api_url}/v0/unauthenticated/bootstrap/mgmt/url with no api_vars"
+  log "Get mgmt_url from #{api_url}/v0/unauthenticated/bootstrap/mgmt/url"
   result = RestClient.get( "#{api_url}/v0/unauthenticated/bootstrap/mgmt/url" )
   log "Get mgmt_url result: #{result}"
   result
