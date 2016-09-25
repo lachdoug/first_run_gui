@@ -22,7 +22,7 @@ end
 
 get '/complete' do
   if post_complete
-    sleep 99999999999999
+    # sleep 99999999999999
     exit
   else
     status 200

@@ -6,26 +6,26 @@
   <legend>Admin</legend>
   <div class="field_group">
     <label>Password</label><br>
-    <input id="input_admin_password" name="admin_password" type="password" placeholder="password" autocomplete="off" required pattern=".{6,}" title="Must be at least 6 characters."><br>
-    <input id="input_admin_password_confirmation" name="admin_password_confirmation" type="password" placeholder="re-enter password" autocomplete="off" required><br>
+    <input id="input_admin_password" name="admin_password" type="password" placeholder="password" autocomplete="off" required pattern=".{6,}" title="Must be at least 6 characters.">
+    <input id="input_admin_password_confirmation" name="admin_password_confirmation" type="password" placeholder="re-enter password" autocomplete="off" required>
     <hint>Password for the Engines system administrator 'admin' account.</hint>
   </div>
   <div class="field_group">
     <label>email</label><br>
-    <input name="admin_email" type="email" placeholder="email address" required><br>
+    <input name="admin_email" type="email" placeholder="email address" required>
     <hint>If you forget the 'admin' password, password reset instructions will be sent to this email address.<br>Optional. Leave blank if you don't want password reset instruction sent.</hint>
   </div>
 
   <legend>System</legend>
   <div class="field_group">
     <label>Hostname</label><br>
-    <input name="hostname" placeholder="hostname" required><br>
+    <input name="hostname" type="text" placeholder="hostname" required>
     <hint>The hostname used by the base OS.</hint>
   </div>
 
   <div class="field_group">
     <input name="local_mgmt" type="checkbox" checked>
-    <label>Install Engines management GUI</label><br>
+    <label>Install Engines management GUI</label>
     <hint>If you don't install a GUI, you can manage this system using engines.org.</hint>
   </div>
 
@@ -35,7 +35,7 @@
     <label for="input_networking_zeroconf"><input id="input_networking_zeroconf" name="networking" type="radio" value="zeroconf" checked>Zeroconf</label><br>
     <label for="input_networking_self_hosted_dns"><input id="input_networking_self_hosted_dns" name="networking" type="radio" value="self_hosted_dns">Self-hosted DNS</label><br>
     <label for="input_networking_external_dns"><input id="input_networking_external_dns" name="networking" type="radio" value="external_dns">Hosted DNS</label><br>
-    <label for="input_networking_dynamic_dns"><input id="input_networking_dynamic_dns" name="networking" type="radio" value="dynamic_dns">Dynamic DNS</label><br>
+    <label for="input_networking_dynamic_dns"><input id="input_networking_dynamic_dns" name="networking" type="radio" value="dynamic_dns">Dynamic DNS</label>
     <hint></hint>
   </div>
 
@@ -51,19 +51,19 @@
   <legend>SSL Certificate</legend>
   <div class="field_group">
     <label>Person</label><br>
-    <input name="ssl_person_name" placeholder="person name" required><br>
+    <input name="ssl_person_name" type="text" placeholder="person name" required>
   </div>
   <div class="field_group">
     <label>Organization</label><br>
-    <input name="ssl_organisation_name" placeholder="organization name" required><br>
+    <input name="ssl_organisation_name" type="text" placeholder="organization name" required>
   </div>
   <div class="field_group">
     <label>City</label><br>
-    <input name="ssl_city" placeholder="city" required><br>
+    <input name="ssl_city" type="text" placeholder="city" required>
   </div>
   <div class="field_group">
     <label>State</label><br>
-    <input name="ssl_state" placeholder="state"><br>
+    <input name="ssl_state" type="text" placeholder="state">
   </div>
   <div class="field_group">
     <label>Country</label><br>
@@ -318,7 +318,7 @@
     	<option value="YE">Yemen</option>
     	<option value="ZM">Zambia</option>
     	<option value="ZW">Zimbabwe</option>
-    </select><br>
+    </select>
   </div>
 
   <hr>
@@ -336,13 +336,13 @@
   <!-- Field templates -->
   <div id="form_domain_name_group_template">
     <label>Domain name</label><br>
-    <input name="domain_name" placeholder="domain name" required><br>
+    <input name="domain_name" type="text" placeholder="domain name" required>
     <hint></hint>
   </div>
   <div id="form_self_hosted_dns_options_group_template">
     <strong>Self-hosted DNS options</strong><br>
     <label for="input_networking_self_dns_local_only">
-      <input id="input_networking_self_dns_local_only" name="self_dns_local_only" type="checkbox">Local only</label><br>
+      <input id="input_networking_self_dns_local_only" name="self_dns_local_only" type="checkbox">Local only</label>
     <hint></hint>
   </div>
   <div id="form_dynamic_dns_options_group_template">
@@ -352,11 +352,11 @@
       <option></option>
       <option value="dyn-dns">DynDNS dyn.com</option>
       <option value="no-ip">No-IP noip.com</option>
-    </select><br>
+    </select>
     <label>Username</label><br>
-    <input name="dynamic_dns_username" placeholder="username" required><br>
+    <input name="dynamic_dns_username" type="text" placeholder="username" required>
     <label>Password</label><br>
-    <input name="dynamic_dns_password" type="password" placeholder="password" required><br>
+    <input name="dynamic_dns_password" type="password" placeholder="password" required>
     <hint></hint>
   </div>
 </div>

@@ -4,15 +4,14 @@
   <div id="first_run__waiting_message">
     <h4>Preparing system</h4>
     <p>Please wait...</p>
-    <p><small>mgmt url <%= @mgmt_url %><br>loacal mgmt: <%= @local_mgmt %></small></p>
+    <p>The Engines system is building. This normally takes a few minutes.</p>
+    <p><small>mgmt url: <%= @mgmt_url %><br>local mgmt? <%= @local_mgmt %></small></p>
   </div>
 
   <div id="starting_system_message" style="display: none;">
-    <h4>Building system</h4>
-    <p>The Engines system is building. This normally takes a few minutes.</p>
     <% if @local_mgmt == 'true' %>
-      <p>Once the build is complete, the Engines management GUI will be available at:<br> <a href="<%= @mgmt_url %>" target="<%= @mgmt_url %>"><%= @mgmt_url %></a>.</p>
-      <p>The Engines system will generate a security certificate. Please accept/trust the certificate when asked to do so. You may upload your own certificate once the Engines system is running.</p>
+      <p>The Engines management GUI is available at:<br> <a href="<%= @mgmt_url %>" target="<%= @mgmt_url %>"><%= @mgmt_url %></a>.</p>
+      <p>The Engines system will generate a temporary security certificate. Please accept/trust the certificate when asked to do so. You may upload your own certificate once the Engines system is running.</p>
     <% else %>
       <p>You can manage this Engines system from a terminal, or you can connect it to an Engines management GUI running on another Engines system.</p>
       <p>To connect this sytem to another Engines management GUI, please identify this system using its URL:<br>
