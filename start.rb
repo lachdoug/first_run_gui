@@ -7,7 +7,7 @@ get '/' do
 end
 
 post '/submit' do
-  if !post_first_run_params(params)
+  if post_first_run_params(params)
     redirect "/wait?local_mgmt=#{params['local_mgmt'] == 'on'}"
   else
     erb :error, layout: :layout
