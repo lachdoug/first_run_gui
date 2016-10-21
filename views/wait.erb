@@ -1,4 +1,4 @@
-<div class="first_run_form success">
+<div class="first_run_page success">
   <h3>Engines setup</h3>
 
   <div id="first_run__waiting_message">
@@ -53,9 +53,9 @@ var ajaxCall = function (type, URL, successFunc, errorFunc) {
 
 var postCloseFirstRun = function() {
   ajaxCall('GET',
-    '/complete',
+    '/complete?local_mgmt=<%= @local_mgmt.to_s %>',
     function(ajaxRequest) {
-      alert('Successful GET /complete ' + ajaxRequest.status);
+      // alert('Successful GET /complete ' + ajaxRequest.status);
       waitForMgmtToStart();
       // setTimeout(function() {
       //   document.getElementById("first_run__waiting_message").style.display = 'none';
@@ -63,7 +63,7 @@ var postCloseFirstRun = function() {
       // }, 2000);
     },
     function(ajaxRequest) {
-      alert('Failed GET /complete ' + ajaxRequest.status);
+      // alert('Failed GET /complete ' + ajaxRequest.status);
       waitForMgmtToStart();
       // setTimeout(function() {
       //   alert('Error: failed to complete setup.');
@@ -72,7 +72,7 @@ var postCloseFirstRun = function() {
   };
 
 var waitForMgmtToStart = function() {
-  alert('Try GET <%= @mgmt_url %>');
+  // alert('Try GET <%= @mgmt_url %>');
   ajaxCall('GET',
     '<%= @mgmt_url %>',
     function(ajaxRequest) {
@@ -81,7 +81,7 @@ var waitForMgmtToStart = function() {
       document.getElementById("starting_system_message").style.display = 'block';
   }, function() {
   setTimeout(function() {
-    alert('Retry after failed GET <%= @mgmt_url %> ' + ajaxRequest.status);
+    // alert('Retry after failed GET <%= @mgmt_url %> ' + ajaxRequest.status);
     waitForMgmtToStart();
   }, 2000) });
 };
