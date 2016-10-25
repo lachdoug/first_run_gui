@@ -39,13 +39,32 @@
     <hint></hint>
   </div>
 
-  <div class="field_group" id="form_domain_name_group">
+  <div class="field_group" id="form_domain_name_group" style="display: none;">
+    <label>Domain name</label><br>
+    <input id="input_domain_name" name="domain_name" type="text" placeholder="domain name">
+    <hint></hint>
   </div>
 
-  <div class="field_group" id="form_self_hosted_dns_options_group">
+  <div class="field_group" id="form_self_hosted_dns_options_group" style="display: none;">
+    <strong>Self-hosted DNS options</strong><br>
+    <label for="input_networking_self_dns_local_only">
+      <input id="input_networking_self_dns_local_only" name="self_dns_local_only" type="checkbox">Local only</label>
+    <hint></hint>
   </div>
 
-  <div class="field_group" id="form_dynamic_dns_options_group">
+  <div class="field_group" id="form_dynamic_dns_options_group" style="display: none;">
+    <strong>Dynamic DNS options</strong><br>
+    <label>Provider</label><br>
+    <select name="dynamic_dns_provider">
+      <option></option>
+      <option value="dyn-dns">DynDNS dyn.com</option>
+      <option value="no-ip">No-IP noip.com</option>
+    </select>
+    <label>Username</label><br>
+    <input id="input_dynamic_dns_username" name="dynamic_dns_username" type="text" placeholder="username">
+    <label>Password</label><br>
+    <input id="input_dynamic_dns_password" name="dynamic_dns_password" type="password" placeholder="password">
+    <hint></hint>
   </div>
 
   <legend>SSL Certificate</legend>
@@ -327,93 +346,77 @@
     <input id="form_submit_button" type="submit" value="Submit">
   </div>
 
-
 </form>
 </div>
 
-
-<div style="display: none;">
-  <!-- Field templates -->
-  <div id="form_domain_name_group_template">
-    <label>Domain name</label><br>
-    <input name="domain_name" type="text" placeholder="domain name" required>
-    <hint></hint>
-  </div>
-  <div id="form_self_hosted_dns_options_group_template">
-    <strong>Self-hosted DNS options</strong><br>
-    <label for="input_networking_self_dns_local_only">
-      <input id="input_networking_self_dns_local_only" name="self_dns_local_only" type="checkbox">Local only</label>
-    <hint></hint>
-  </div>
-  <div id="form_dynamic_dns_options_group_template">
-    <strong>Dynamic DNS options</strong><br>
-    <label>Provider</label><br>
-    <select name="dynamic_dns_provider" required>
-      <option></option>
-      <option value="dyn-dns">DynDNS dyn.com</option>
-      <option value="no-ip">No-IP noip.com</option>
-    </select>
-    <label>Username</label><br>
-    <input name="dynamic_dns_username" type="text" placeholder="username" required>
-    <label>Password</label><br>
-    <input name="dynamic_dns_password" type="password" placeholder="password" required>
-    <hint></hint>
-  </div>
-</div>
-
 <script>
+// Show networking inputs based on networking type selection
+var input_networking_show_zeroconf_fields = function() {
+  document.getElementById("form_domain_name_group").style.display = "none";
+  document.getElementById("form_self_hosted_dns_options_group").style.display = "none";
+  document.getElementById("form_dynamic_dns_options_group").style.display = "none";
+  document.getElementById("input_domain_name").required = "";
+  document.getElementById("input_dynamic_dns_username").required = "";
+  document.getElementById("input_dynamic_dns_password").required = "";
+};
+var input_networking_show_self_hosted_dns_fields = function() {
+  document.getElementById("form_domain_name_group").style.display = "block";
+  document.getElementById("form_self_hosted_dns_options_group").style.display = "block";
+  document.getElementById("form_dynamic_dns_options_group").style.display = "none";
+  document.getElementById("input_domain_name").required = "required";
+  document.getElementById("input_dynamic_dns_username").required = "";
+  document.getElementById("input_dynamic_dns_password").required = "";
+};
+var input_networking_show_external_dns_fields = function() {
+  document.getElementById("form_domain_name_group").style.display = "block";
+  document.getElementById("form_self_hosted_dns_options_group").style.display = "none";
+  document.getElementById("form_dynamic_dns_options_group").style.display = "none";
+  document.getElementById("input_domain_name").required = "required";
+  document.getElementById("input_dynamic_dns_username").required = "";
+  document.getElementById("input_dynamic_dns_password").required = "";
+};
+var input_networking_show_dynamic_dns_fields = function() {
+  document.getElementById("form_domain_name_group").style.display = "block";
+  document.getElementById("form_self_hosted_dns_options_group").style.display = "none";
+  document.getElementById("form_dynamic_dns_options_group").style.display = "block";
+  document.getElementById("input_domain_name").required = "required";
+  document.getElementById("input_dynamic_dns_username").required = "required";
+  document.getElementById("input_dynamic_dns_password").required = "required";
+};
+document.getElementById("input_networking_zeroconf").addEventListener("click", input_networking_show_zeroconf_fields );
+document.getElementById("input_networking_self_hosted_dns").addEventListener("click", input_networking_show_self_hosted_dns_fields );
+document.getElementById("input_networking_external_dns").addEventListener("click", input_networking_show_external_dns_fields );
+document.getElementById("input_networking_dynamic_dns").addEventListener("click", input_networking_show_dynamic_dns_fields );
+// When page loads, display correct networking inputs. This is to allow user to reload page and still maintain correct display of fields.
+if ( document.getElementById("input_networking_zeroconf").checked ) { input_networking_show_zeroconf_fields() };
+if ( document.getElementById("input_networking_self_hosted_dns").checked ) { input_networking_show_self_hosted_dns_fields() };
+if ( document.getElementById("input_networking_external_dns").checked ) { input_networking_show_external_dns_fields() };
+if ( document.getElementById("input_networking_dynamic_dns").checked ) { input_networking_show_dynamic_dns_fields() };
 
-document.getElementById("input_networking_zeroconf").addEventListener("click", function(event){
-  document.getElementById("form_domain_name_group").innerHTML = "";
-  document.getElementById("form_self_hosted_dns_options_group").innerHTML = "";
-  document.getElementById("form_dynamic_dns_options_group").innerHTML = "";
-});
-
-document.getElementById("input_networking_self_hosted_dns").addEventListener("click", function(event){
-  document.getElementById("form_domain_name_group").innerHTML = document.getElementById("form_domain_name_group_template").innerHTML;
-  document.getElementById("form_self_hosted_dns_options_group").innerHTML = document.getElementById("form_self_hosted_dns_options_group_template").innerHTML;
-  document.getElementById("form_dynamic_dns_options_group").innerHTML = "";
-});
-
-document.getElementById("input_networking_external_dns").addEventListener("click", function(event){
-  document.getElementById("form_domain_name_group").innerHTML = document.getElementById("form_domain_name_group_template").innerHTML;
-  document.getElementById("form_self_hosted_dns_options_group").innerHTML = "";
-  document.getElementById("form_dynamic_dns_options_group").innerHTML = "";
-});
-
-document.getElementById("input_networking_dynamic_dns").addEventListener("click", function(event){
-  document.getElementById("form_domain_name_group").innerHTML = document.getElementById("form_domain_name_group_template").innerHTML;
-  document.getElementById("form_self_hosted_dns_options_group").innerHTML = "";
-  document.getElementById("form_dynamic_dns_options_group").innerHTML = document.getElementById("form_dynamic_dns_options_group_template").innerHTML;
-});
-
+// Custom input validation
 var validate_passwords_match = function() {
   if ( document.getElementById("input_admin_password_confirmation").value !== '' &&
        document.getElementById("input_admin_password").value !== document.getElementById("input_admin_password_confirmation").value ) {
-    document.getElementById("input_admin_password_confirmation").setCustomValidity('Password must match.');
+    document.getElementById("input_admin_password_confirmation").setCustomValidity('Passwords must match.');
   } else {
     document.getElementById("input_admin_password_confirmation").setCustomValidity('');
   };
 }
-
 document.getElementById("input_admin_password").addEventListener("change", function() { validate_passwords_match(); });
 document.getElementById("input_admin_password_confirmation").addEventListener("change", function() { validate_passwords_match(); });
 
+// Show help
 var hints_hidden = function() {
   return window.getComputedStyle(document.getElementsByTagName('hint')[0], null).display == 'none';
 };
-
 var set_hints_display = function(display_state) {
   var hints = document.getElementsByTagName('hint')
   for (var i = 0; i < hints.length; i++) {
     hints[i].style.display = display_state;
   };
 };
-
 document.getElementById("toggle_hints").addEventListener("click", function() {
   if (hints_hidden()) { set_hints_display('block') } else { set_hints_display('none') };
 });
-
-
 
 </script>

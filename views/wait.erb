@@ -1,15 +1,16 @@
-<div class="first_run_page success">
-  <h3>Engines setup</h3>
-
-  <div id="first_run__waiting_message">
+<div id="waiting_message">
+  <div class="first_run_page success">
+    <h3>Engines setup</h3>
     <h4>Preparing system</h4>
     <p>Please wait...</p>
     <p>The Engines system is building. This normally takes a few minutes.</p>
     <p><small>mgmt url: <%= @mgmt_url %><br>local mgmt? <%= @local_mgmt %></small></p>
   </div>
+</div>
 
-  <div id="starting_system_message" style="display: none;">
-    <% if @local_mgmt == 'true' %>
+<div id="starting_system_message" style="display: none;">
+  <div class="first_run_page success">
+    <% if @local_mgmt %>
       <p>The Engines management GUI is available at:<br> <a href="<%= @mgmt_url %>" target="<%= @mgmt_url %>"><%= @mgmt_url %></a>.</p>
       <p>The Engines system will generate a temporary security certificate. Please accept/trust the certificate when asked to do so. You may upload your own certificate once the Engines system is running.</p>
     <% else %>
@@ -27,7 +28,15 @@
         Engines wiki</a> for more information on using the command line.</p>
     <% end %>
   </div>
+</div>
 
+
+<div id="error_message" style="display: none;">
+  <div class="first_run_page error">
+    <h3>Engines setup</h3>
+    <h4>Error</h4>
+    <p>Setup did not complete.</p>
+  </div>
 </div>
 
 <script>
@@ -41,11 +50,11 @@ var ajaxCall = function (type, URL, successFunc, errorFunc) {
   ajaxRequest.open(type, URL, true);
   ajaxRequest.onreadystatechange = function () {
     if (ajaxRequest.readyState == 4) {
-      // if (ajaxRequest.status == 200) {
-        successFunc(ajaxRequest);
-      // } else {
-      //   errorFunc(ajaxRequest);
-      // }
+      if (ajaxRequest.status == 200) {
+        successFunc();
+      } else {
+        errorFunc();
+      }
     };
   };
   ajaxRequest.send();
@@ -54,36 +63,34 @@ var ajaxCall = function (type, URL, successFunc, errorFunc) {
 var postCloseFirstRun = function() {
   ajaxCall('GET',
     '/complete?local_mgmt=<%= @local_mgmt.to_s %>',
-    function(ajaxRequest) {
-      // alert('Successful GET /complete ' + ajaxRequest.status);
+    function() {
       waitForMgmtToStart();
-      // setTimeout(function() {
-      //   document.getElementById("first_run__waiting_message").style.display = 'none';
-      //   document.getElementById("starting_system_message").style.display = 'block';
-      // }, 2000);
     },
-    function(ajaxRequest) {
-      // alert('Failed GET /complete ' + ajaxRequest.status);
+    function() {
       waitForMgmtToStart();
-      // setTimeout(function() {
-      //   alert('Error: failed to complete setup.');
-      // }, 2000)
-    } );
-  };
+    }
+    // function() {
+    //   setTimeout(function() {
+    //     document.getElementById("waiting_message").style.display = 'none';
+    //     document.getElementById("error_message").style.display = 'block';
+    //   }, 2000);
+    // }
+  );
+};
 
 var waitForMgmtToStart = function() {
-  // alert('Try GET <%= @mgmt_url %>');
   ajaxCall('GET',
     '<%= @mgmt_url %>',
-    function(ajaxRequest) {
-      alert('Successful GET <%= @mgmt_url %> ' + ajaxRequest.status);
-      document.getElementById("first_run__waiting_message").style.display = 'none';
+    function() {
+      document.getElementById("waiting_message").style.display = 'none';
       document.getElementById("starting_system_message").style.display = 'block';
-  }, function() {
-  setTimeout(function() {
-    // alert('Retry after failed GET <%= @mgmt_url %> ' + ajaxRequest.status);
-    waitForMgmtToStart();
-  }, 2000) });
+    },
+    function() {
+      setTimeout(function() {
+        waitForMgmtToStart();
+      }, 2000);
+    }
+  );
 };
 
 main();
