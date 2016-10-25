@@ -3,7 +3,7 @@
     <h3>Engines setup</h3>
     <h4>Preparing system</h4>
     <p>Please wait...</p>
-    <p>The Engines system is building. This normally takes a few minutes.</p>
+    <p>Setup is preparing and starting the Engines system. This normally takes a few minutes.</p>
     <p><small>mgmt url: <%= @mgmt_url %><br>local mgmt? <%= @local_mgmt %></small></p>
   </div>
 </div>
@@ -88,7 +88,7 @@ var waitForMgmtToStart = function() {
     function() {
       setTimeout(function() {
         waitForMgmtToStart();
-      }, 2000);
+      }, 5000);
     }
   );
 };

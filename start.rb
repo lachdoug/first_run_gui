@@ -3,6 +3,7 @@ require 'rest-client'
 require 'json'
 
 get '/' do
+  @default_hostname = ENV['HOSTNAME'] || 'mgmt'
   erb :form, layout: :layout
 end
 
@@ -35,11 +36,11 @@ def form_strong_params
     hostname: params[:hostname].to_s,
     local_mgmt: params[:local_mgmt].to_s == 'on',
     networking: params[:networking].to_s,
-    domain_name: params[:domain_name].to_s,
-    self_dns_local_only: params[:self_dns_local_only].to_s == 'on',
-    dynamic_dns_provider: params[:dynamic_dns_provider].to_s,
-    dynamic_dns_username: params[:dynamic_dns_username].to_s,
-    dynamic_dns_password: params[:dynamic_dns_password].to_s,
+    domain_name: ( params[:domain_name].to_s unless params[:networking] == 'zeroconf' ),
+    self_dns_local_only: ( params[:self_dns_local_only].to_s == 'on' if params[:networking] == 'self_hosted_dns' ),
+    dynamic_dns_provider: ( params[:dynamic_dns_provider].to_s if params[:networking] == 'dynamic_dns' ),
+    dynamic_dns_username: ( params[:dynamic_dns_username].to_s if params[:networking] == 'dynamic_dns' ),
+    dynamic_dns_password: ( params[:dynamic_dns_password].to_s if params[:networking] == 'dynamic_dns' ),
     ssl_person_name: params[:ssl_person_name].to_s,
     ssl_organisation_name: params[:ssl_organisation_name].to_s,
     ssl_city: params[:ssl_city].to_s,

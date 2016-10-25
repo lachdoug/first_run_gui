@@ -5,7 +5,8 @@ This app presents a form (and associated submit routines) for configuring a fres
 
 Sinatra app. No DB or persistent directories required.
 
-Environment variable:
-- SYSTEM_API_URL ( e.g. "http://127.0.0.1:2380/" )
+Environment variables:
+- ENV['SYSTEM_API_URL'] ( e.g. "http://127.0.0.1:2380/" )
+- ENV['HOSTNAME'] ( current system host name, e.g. "fred" )
 
-Launch: start.rb
+Launch the app with: start.rb

@@ -5,7 +5,12 @@
   <title>Engines first run</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body {font-family: sans-serif; font-size: 16px; margin: 20px; background-color: #fff; }
+    body {
+      font-family: sans-serif;
+      font-size: 16px;
+      margin: 20px;
+      background-color: #fff; }
+
     div.first_run_page {
       border: 1px solid #ccc;
       width: 400px;
@@ -14,22 +19,46 @@
       border-radius: 6px;
       background-color: #fff;
       -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    }
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); }
+
     h3, h4 { color: #333; font-weight: 500; }
-    hint { font-size: 14px; color: #666; display: none; }
-    #toggle_hints { float: right; margin: 10px; padding: 8px; color: #aaa; background-color: #fff; border: 1px solid #ccc; border-radius: 18px; height: 35px; width: 35px; }
-    #toggle_hints:hover { cursor: pointer; }
-    legend { border-bottom: 1px solid #ccc; padding: 5px; }
-    .field_group { margin: 10px; }
-    /*input, select { margin-left: 10px; max-width: 244px; }*/
-    input#form_submit_button { background-color: #337ab7; color: #fff; padding: 6px 12px; font-size: 16px; border: 1px solid #2e6da4; border-radius: 4px; }
-    input#form_submit_button:hover { background-color: #286090; border-color: #204d74; }
-    code { color: red; }
     .error h4 { color: #f66; }
     .success h4 { color: #696; }
 
-    input[type='url'], input[type='text'], input[type='password'], input[type='email'], select, textarea {
+    hint { font-size: 14px; color: #666; display: none; }
+    legend { border-bottom: 1px solid #ccc; padding: 5px; }
+    code { color: red; }
+    div.field_group { margin: 10px; }
+
+    #toggle_hints {
+      float: right;
+      margin: 10px;
+      padding: 8px;
+      color: #aaa;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 18px;
+      height: 35px;
+      width: 35px; }
+    #toggle_hints:hover { cursor: pointer; }
+
+    input#form_submit_button {
+      background-color: #337ab7;
+      color: #fff;
+      padding: 6px 12px;
+      font-size: 16px;
+      border: 1px solid #2e6da4;
+      border-radius: 4px; }
+    input#form_submit_button:hover {
+      background-color: #286090;
+      border-color: #204d74; }
+
+    input[type='url'],
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    select,
+    textarea {
        margin-bottom: 1px;
        display: block;
        width: 240px;
@@ -46,15 +75,19 @@
        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
        -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
        -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-       transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-      }
-      select { width: 266px; height: 38px; }
-     input[type='url']:focus, input[type='text']:focus, input[type='password']:focus, input[type='email']:focus, select:focus, textarea:focus {
+       transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s; }
+    input[type='url']:focus,
+    input[type='text']:focus,
+    input[type='password']:focus,
+    input[type='email']:focus,
+    select:focus,
+    textarea:focus {
        border-color: #66afe9;
        outline: 0;
        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-       box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-     }
+       box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
+    select { width: 266px; height: 38px; }
+       
   </style>
 </head>
 <body>
