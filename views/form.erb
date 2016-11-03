@@ -3,7 +3,7 @@
 <h3>Engines setup</h3>
 <form action="/submit" method="post">
 
-  <legend>Admin</legend>
+  <legend>System admin</legend>
   <div class="field_group">
     <label>Password</label><br>
     <input id="input_admin_password" name="admin_password" type="password" placeholder="password" autocomplete="off" required pattern=".{6,}" title="Must be at least 6 characters.">
@@ -16,22 +16,28 @@
     <hint>If you forget the 'admin' password, password reset instructions will be sent to this email address.<br>Optional. Leave blank if you don't want password reset instruction sent.</hint>
   </div>
 
-  <legend>System</legend>
+  <legend>GUI</legend>
   <div class="field_group">
-    <label>Hostname</label><br>
-    <input name="hostname" type="text" placeholder="hostname" value="<%= @default_hostname %>" required>
     <hint>The hostname used by the base OS.</hint>
   </div>
 
   <div class="field_group">
-    <input name="local_mgmt" type="checkbox" checked>
-    <label>Install Engines management GUI</label>
+    <label>
+      <input name="local_mgmt" type="checkbox" checked></input>
+      Install Engines management application
+    </label>
     <hint>If you don't install a GUI, you can manage this system using engines.org.</hint>
   </div>
 
   <legend>Networking</legend>
 
   <div class="field_group">
+    <label>Hostname</label><br>
+    <input name="hostname" type="text" placeholder="hostname" value="<%= @default_hostname %>" required>
+    <hint></hint>
+  </div>
+  <div class="field_group">
+    <label>Domain</label><br>
     <label for="input_networking_zeroconf"><input id="input_networking_zeroconf" name="networking" type="radio" value="zeroconf" checked>Zeroconf</label><br>
     <label for="input_networking_self_hosted_dns"><input id="input_networking_self_hosted_dns" name="networking" type="radio" value="self_hosted_dns">Self-hosted DNS</label><br>
     <label for="input_networking_external_dns"><input id="input_networking_external_dns" name="networking" type="radio" value="external_dns">Hosted DNS</label><br>
