@@ -3,7 +3,7 @@ require 'rest-client'
 require 'json'
 
 get '/' do
-  @default_hostname = ENV['HOSTNAME'] || 'mgmt'
+  @default_hostname = ENV['HOSTNAME'] || 'engines'
   erb :form, layout: :layout
 end
 
@@ -33,6 +33,9 @@ def form_strong_params
   { admin_password: params[:admin_password].to_s,
     admin_password_confirmation: params[:admin_password_confirmation].to_s,
     admin_email: params[:admin_email].to_s,
+    timezone: params[:timezone].to_s,
+    country: params[:country].to_s,
+    language: params[:language].to_s,
     hostname: params[:hostname].to_s,
     local_mgmt: params[:local_mgmt].to_s == 'on',
     networking: params[:networking].to_s,
