@@ -17,14 +17,15 @@
   </div>
 
   <br>
-  <legend>Locale</legend>
+  <legend>Timezone</legend>
   <div class="field_group">
-    <label>Timezone</label><br>
     <select id="select_timezone" name="timezone" required>
       <option value="" disabled selected></option>
       <%= erb :timezone_select_options %>
     </select>
   </div>
+  <br>
+  <legend>Locale</legend>
   <div class="field_group">
     <label>Country</label><br>
     <select id="select_country" name="country" required>
@@ -202,7 +203,7 @@ for (var opt, j = 0; opt = opts[j]; j++) {
   }
 }
 // language
-var val = window.navigator.language.substring(0,2);
+var val = window.navigator.language.split("-")[0];
 var sel = document.getElementById('select_language');
 var opts = sel.options;
 for (var opt, j = 0; opt = opts[j]; j++) {
@@ -211,10 +212,16 @@ for (var opt, j = 0; opt = opts[j]; j++) {
     break;
   }
 }
-
-
-
-
+// country
+var val = window.navigator.language.split("-")[1];
+var sel = document.getElementById('select_country');
+var opts = sel.options;
+for (var opt, j = 0; opt = opts[j]; j++) {
+  if (opt.value == val) {
+    sel.selectedIndex = j;
+    break;
+  }
+}
 
 // Show help
 var hints_hidden = function() {
