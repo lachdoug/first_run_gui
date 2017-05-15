@@ -20,21 +20,21 @@
   <legend>Locale</legend>
   <div class="field_group">
     <label>Timezone</label><br>
-    <select name="timezone" required>
+    <select id="select_timezone" name="timezone" required>
       <option value="" disabled selected></option>
       <%= erb :timezone_select_options %>
     </select>
   </div>
   <div class="field_group">
     <label>Country</label><br>
-    <select name="country" required>
+    <select id="select_country" name="country" required>
       <option value="" disabled selected></option>
       <%= erb :country_select_options %>
     </select>
   </div>
   <div class="field_group">
     <label>Language</label><br>
-    <select name="language" required>
+    <select id="select_language" name="language" required>
       <option value="" disabled selected></option>
       <%= erb :language_select_options %>
     </select>
@@ -189,6 +189,32 @@ var validate_passwords_match = function() {
 };
 document.getElementById("input_admin_password").addEventListener("change", function() { validate_passwords_match(); });
 document.getElementById("input_admin_password_confirmation").addEventListener("change", function() { validate_passwords_match(); });
+
+// Prepopulate locale using client broswer settings
+// timezone
+var val = Intl.DateTimeFormat().resolvedOptions().timeZone;
+var sel = document.getElementById('select_timezone');
+var opts = sel.options;
+for (var opt, j = 0; opt = opts[j]; j++) {
+  if (opt.value == val) {
+    sel.selectedIndex = j;
+    break;
+  }
+}
+// language
+var val = window.navigator.language.substring(0,2);
+var sel = document.getElementById('select_language');
+var opts = sel.options;
+for (var opt, j = 0; opt = opts[j]; j++) {
+  if (opt.value == val) {
+    sel.selectedIndex = j;
+    break;
+  }
+}
+
+
+
+
 
 // Show help
 var hints_hidden = function() {
