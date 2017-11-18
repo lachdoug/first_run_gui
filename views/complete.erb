@@ -2,30 +2,30 @@
   <div class="first_run_page success">
     <h3>Engines setup</h3>
     <h4>Preparing system</h4>
-    <p>Please wait...</p>
     <p>Setup is preparing and starting the Engines system. This normally takes a few minutes.</p>
-    <p><small>mgmt url: <%= @mgmt_url %><br>local mgmt? <%= @local_mgmt %></small></p>
+    <p>Please wait...</p>
   </div>
 </div>
 
-<div id="starting_system_message" style="display: none;">
+<div id="system_up_message" style="display: none;">
   <div class="first_run_page success">
+    <h3>Engines setup</h3>
+    <h4>Complete</h4>
+    <p>The Engines system is ready.</p>
+    <hr>
     <% if @local_mgmt %>
-      <p>The Engines management GUI is available at:<br> <a href="<%= @mgmt_url %>" target="<%= @mgmt_url %>"><%= @mgmt_url %></a>.</p>
-      <p>The Engines system will generate a temporary security certificate. Please accept/trust the certificate when asked to do so. You may upload your own certificate once the Engines system is running.</p>
+      <p>A temporary security certificate has been generated for the system. Please accept/trust the certificate when asked to do so.</p>
+      <p>The admin GUI is available at:<br> <a href="<%= @mgmt_url %>" target="<%= @mgmt_url %>"><%= @mgmt_url %></a>.</p>
     <% else %>
-      <p>You can manage this Engines system from a terminal, or you can connect it to an Engines management GUI running on another Engines system.</p>
-      <p>To connect this sytem to another Engines management GUI, please identify this system using its URL:<br>
-        <code><%= @mgmt_url %></code><br>
+      <p>The system was setup without an admin GUI. Manage it with a remote admin GUI or terminal.</p>
+      <p>To connect from a remote GUI use:<br>
+        <%= @mgmt_url %><br>
       </p>
-      <p>For terminal access, please login as engines, using <code>sudo su -l engines</code>.</p>
-      <p>Depending on your installation, you may need to login as another user first. For example, at AWS:<br>
-        <code>ssh -i key ubuntu@ip.address<br>sudo su -l engines</code>
-      </p>
+      <p>For terminal access, login as engines using<br><code>sudo su -l engines</code>.</p>
       <p>See the
         <a href="http://tiki.prod.engines.org/tiki-index.php?page=Command%20Line"
         target="http://tiki.prod.engines.org/tiki-index.php?page=Command%20Line">
-        Engines wiki</a> for more information on using the command line.</p>
+        Engines docs</a> for more information.</p>
     <% end %>
   </div>
 </div>
@@ -39,6 +39,8 @@
   </div>
 </div>
 
+<p style="<%= Sinatra::Base.development? ? '' : 'display: none' %>"><small>mgmt url: <%= @mgmt_url %><br>local mgmt? <%= @local_mgmt %><br>Polling IP <%= @polling_ip %></small></p>
+
 <script>
 
 var main = function() {
@@ -48,12 +50,13 @@ var main = function() {
 var ajaxCall = function (type, URL, successFunc, errorFunc) {
   var ajaxRequest = new XMLHttpRequest();
   ajaxRequest.open(type, URL, true);
-  ajaxRequest.onreadystatechange = function () {
+  ajaxRequest.onreadystatechange = function (e) {
+    debugger;
     if (ajaxRequest.readyState == 4) {
       if (ajaxRequest.status == 200) {
-        successFunc();
+        successFunc(e);
       } else {
-        errorFunc();
+        errorFunc(e);
       }
     };
   };
@@ -80,12 +83,14 @@ var postCloseFirstRun = function() {
 
 var waitForMgmtToStart = function() {
   ajaxCall('GET',
-    '<%= @mgmt_url %>',
+    'http://<%= @polling_ip %>:80/index.html',
+    // 'https://jsonplaceholder.typicode.com/posts/1',
     function() {
       document.getElementById("waiting_message").style.display = 'none';
-      document.getElementById("starting_system_message").style.display = 'block';
+      document.getElementById("system_up_message").style.display = 'block';
     },
-    function() {
+    function(e) {
+      debugger;
       setTimeout(function() {
         waitForMgmtToStart();
       }, 5000);

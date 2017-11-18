@@ -1,171 +1,190 @@
 <div class="first_run_page">
-<button type="button" id="toggle_hints">?</button>
-<h3>Engines setup</h3>
-<form action="/submit" method="post">
+<form id="setup_form" action="/submit" method="post">
 
-  <legend>System admin</legend>
-  <div class="field_group">
-    <label>Password</label><br>
-    <input id="input_admin_password" name="admin_password" type="password" placeholder="password" autocomplete="off" required pattern=".{6,}" title="Must be at least 6 characters.">
-    <input id="input_admin_password_confirmation" name="admin_password_confirmation" type="password" placeholder="re-enter password" autocomplete="off" required>
-    <hint>Password for the Engines system administrator 'admin' account.</hint>
-  </div>
-  <div class="field_group">
-    <label>email</label><br>
-    <input name="admin_email" type="email" placeholder="email address" required>
-    <hint>If you forget the 'admin' password, password reset instructions will be sent to this email address.<br>Optional. Leave blank if you don't want password reset instruction sent.</hint>
-  </div>
+  <div id="step1">
+    <h3>Setup 1 of 4</h3>
+    <legend>Admin</legend>
+    <div class="field_group">
+      <label>Password</label><br>
+      <input id="input_admin_password" name="admin_password" type="password" placeholder="password" autocomplete="off" required pattern=".{6,}" title="Must be at least 6 characters.">
+      <input id="input_admin_password_confirmation" name="admin_password_confirmation" type="password" placeholder="re-enter password" autocomplete="off" required>
+      <hint>Password for the Engines system administrator 'admin' account. Use this password to sign in to your Engines admin interface.</hint>
+    </div>
+    <div class="field_group">
+      <label>
+        <input name="local_mgmt" type="checkbox" checked></input>
+        Install admin GUI
+      </label>
+      <hint>This option is for advanced users. Most users should leave the box checked.<br>You can setup Engines without an admin GUI, then manage Engines remotely or via the command line.</hint>
+    </div>
 
-  <br>
-  <legend>Timezone</legend>
-  <div class="field_group">
-    <select id="select_timezone" name="timezone" required>
-      <option value="" disabled selected></option>
-      <%= erb :timezone_select_options %>
-    </select>
-  </div>
-  <br>
-  <legend>Locale</legend>
-  <div class="field_group">
-    <label>Country</label><br>
-    <select id="select_country" name="country" required>
-      <option value="" disabled selected></option>
-      <%= erb :country_select_options %>
-    </select>
-  </div>
-  <div class="field_group">
-    <label>Language</label><br>
-    <select id="select_language" name="language" required>
-      <option value="" disabled selected></option>
-      <%= erb :language_select_options %>
-    </select>
+    <p class="clearfix">
+      <input type="button" class="form_ok_button pull-right" onclick='doStep1NextButton();' value="Next &rarr;"></input>
+    </p>
   </div>
 
-  <br>
-  <legend>GUI</legend>
-  <div class="field_group">
-    <hint>The hostname used by the base OS.</hint>
+  <div id="step2" style="display: none;">
+    <h3>Setup 2 of 4</h3>
+    <legend>Locale</legend>
+    <div class="field_group">
+      <label>Timezone</label><br>
+      <select id="select_timezone" name="timezone" required>
+        <option value="" disabled selected></option>
+        <%= erb :timezone_select_options %>
+      </select>
+    </div>
+    <div class="field_group">
+      <label>Country</label><br>
+      <select id="select_country" name="country" required>
+        <option value="" disabled selected></option>
+        <%= erb :country_select_options %>
+      </select>
+    </div>
+    <div class="field_group">
+      <label>Language</label><br>
+      <select id="select_language" name="language" required>
+        <option value="" disabled selected></option>
+        <%= erb :language_select_options %>
+      </select>
+    </div>
+    <p class="clearfix">
+      <input type="button" class="form_back_button" onclick='backToStep1();' value="&larr; Back"></input>
+      <input type="button" class="form_ok_button pull-right" onclick='doStep2NextButton();' value="Next &rarr;"></input>
+    </p>
   </div>
 
-  <div class="field_group">
-    <label>
-      <input name="local_mgmt" type="checkbox" checked></input>
-      Install Engines management application
-    </label>
-    <hint>Most users should install the management GUI. You must manage this system remotely if you don't install the GUI.</hint>
+  <div id="step3" style="display: none;">
+    <h3>Setup 3 of 4</h3>
+    <legend>Networking</legend>
+    <div class="field_group">
+      <label>Hostname</label><br>
+      <input id="input_networking_hostname" name="hostname" type="text" value="<%= @default_hostname %>" required>
+      <hint>The hostname used by the base OS.</hint>
+    </div>
+    <div class="field_group">
+      <label>Domain</label><br>
+      <label for="input_networking_zeroconf"><input id="input_networking_zeroconf" name="networking" type="radio" value="zeroconf" checked>Zeroconf</label><br>
+      <label for="input_networking_self_hosted_dns"><input id="input_networking_self_hosted_dns" name="networking" type="radio" value="self_hosted_dns">Self-hosted DNS</label><br>
+      <label for="input_networking_external_dns"><input id="input_networking_external_dns" name="networking" type="radio" value="external_dns">Hosted DNS</label><br>
+      <label for="input_networking_dynamic_dns"><input id="input_networking_dynamic_dns" name="networking" type="radio" value="dynamic_dns">Dynamic DNS</label>
+      <hint></hint>
+    </div>
+
+    <div class="field_group" id="form_domain_name_group" style="display: none;">
+      <label>Domain name</label><br>
+      <input id="input_networking_dns_domain_name" name="domain_name" type="text">
+      <hint></hint>
+    </div>
+
+    <div class="field_group" id="form_self_hosted_dns_options_group" style="display: none;">
+      <strong>Self-hosted DNS options</strong><br>
+      <label for="input_networking_self_dns_local_only">
+        <input id="input_networking_self_dns_local_only" name="self_dns_local_only" type="checkbox">Local only</label>
+      <hint></hint>
+    </div>
+
+    <div class="field_group" id="form_dynamic_dns_options_group" style="display: none;">
+      <strong>Dynamic DNS options</strong><br>
+      <label>Provider</label><br>
+      <select id="select_dynamic_dns_provider" name="dynamic_dns_provider">
+        <option></option>
+        <option value="dyn-dns">DynDNS dyn.com</option>
+        <option value="no-ip">No-IP noip.com</option>
+      </select>
+      <label>Username</label><br>
+      <input id="input_dynamic_dns_username" name="dynamic_dns_username" type="text">
+      <label>Password</label><br>
+      <input id="input_dynamic_dns_password" name="dynamic_dns_password" type="password">
+      <hint></hint>
+    </div>
+
+    <p class="clearfix">
+      <input type="button" class="form_back_button" onclick='backToStep2();' value="&larr; Back"></input>
+      <input type="button" class="form_ok_button pull-right" onclick='doStep3NextButton();' value="Next &rarr;"></input>
+    </p>
+
   </div>
 
-  <br>
-  <legend>Networking</legend>
+  <div id="step4" style="display: none;">
+    <h3>Setup 4 of 4</h3>
+    <legend>SSL Certificate</legend>
+    <div class="field_group">
+      <hint>An SSL certificate will be generate to help secure your Engines server. Please enter the details for an identity for the certificate.</hint>
+      <label>Name</label><br>
+      <input id="input_ssl_ssl_person_name" name="ssl_person_name" type="text" required>
+    </div>
+    <div class="field_group">
+      <label>Email</label><br>
+      <input id="input_ssl_ssl_email" name="ssl_email" type="email" required>
+    </div>
+    <div class="field_group">
+      <label>Organization</label><br>
+      <input id="input_ssl_ssl_organisation_name" name="ssl_organisation_name" type="text" required>
+    </div>
+    <div class="field_group field_group_half_width">
+      <label>City</label><br>
+      <input id="input_ssl_ssl_city" name="ssl_city" type="text" required>
+    </div>
+    <div class="field_group field_group_half_width">
+      <label>State</label><br>
+      <input id="input_ssl_ssl_state" name="ssl_state" type="text">
+    </div>
+    <div class="field_group">
+      <label>Country</label><br>
+      <select id="select_ssl_ssl_country" name="ssl_country" required>
+        <option value="" disabled selected></option>
+        <%= erb :country_select_options %>
+      </select>
+    </div>
 
-  <div class="field_group">
-    <label>Hostname</label><br>
-    <input name="hostname" type="text" value="<%= @default_hostname %>" required>
-    <hint></hint>
-  </div>
-  <div class="field_group">
-    <label>Domain</label><br>
-    <label for="input_networking_zeroconf"><input id="input_networking_zeroconf" name="networking" type="radio" value="zeroconf" checked>Zeroconf</label><br>
-    <label for="input_networking_self_hosted_dns"><input id="input_networking_self_hosted_dns" name="networking" type="radio" value="self_hosted_dns">Self-hosted DNS</label><br>
-    <label for="input_networking_external_dns"><input id="input_networking_external_dns" name="networking" type="radio" value="external_dns">Hosted DNS</label><br>
-    <label for="input_networking_dynamic_dns"><input id="input_networking_dynamic_dns" name="networking" type="radio" value="dynamic_dns">Dynamic DNS</label>
-    <hint></hint>
-  </div>
+    <p class="clearfix">
+      <input type="button" class="form_back_button" onclick='backToStep3();' value="&larr; Back"></input>
+      <input type="button" class="form_ok_button pull-right" onclick='doStep4NextButton();' value="Done"></input>
+    </p>
 
-  <div class="field_group" id="form_domain_name_group" style="display: none;">
-    <label>Domain name</label><br>
-    <input id="input_domain_name" name="domain_name" type="text">
-    <hint></hint>
-  </div>
-
-  <div class="field_group" id="form_self_hosted_dns_options_group" style="display: none;">
-    <strong>Self-hosted DNS options</strong><br>
-    <label for="input_networking_self_dns_local_only">
-      <input id="input_networking_self_dns_local_only" name="self_dns_local_only" type="checkbox">Local only</label>
-    <hint></hint>
-  </div>
-
-  <div class="field_group" id="form_dynamic_dns_options_group" style="display: none;">
-    <strong>Dynamic DNS options</strong><br>
-    <label>Provider</label><br>
-    <select name="dynamic_dns_provider">
-      <option></option>
-      <option value="dyn-dns">DynDNS dyn.com</option>
-      <option value="no-ip">No-IP noip.com</option>
-    </select>
-    <label>Username</label><br>
-    <input id="input_dynamic_dns_username" name="dynamic_dns_username" type="text">
-    <label>Password</label><br>
-    <input id="input_dynamic_dns_password" name="dynamic_dns_password" type="password">
-    <hint></hint>
-  </div>
-
-  <br>
-  <legend>SSL Certificate</legend>
-  <div class="field_group">
-    <label>Person</label><br>
-    <input name="ssl_person_name" type="text" required>
-  </div>
-  <div class="field_group">
-    <label>Organization</label><br>
-    <input name="ssl_organisation_name" type="text" required>
-  </div>
-  <div class="field_group">
-    <label>City</label><br>
-    <input name="ssl_city" type="text" required>
-  </div>
-  <div class="field_group">
-    <label>State</label><br>
-    <input name="ssl_state" type="text">
-  </div>
-  <div class="field_group">
-    <label>Country</label><br>
-    <select name="ssl_country" required>
-      <option value="" disabled selected></option>
-      <%= erb :country_select_options %>
-    </select>
-  </div>
-
-  <hr>
-
-  <div class="field_group">
-    <input id="form_submit_button" type="submit" value="Submit">
   </div>
 
 </form>
 </div>
 
+<%= @public_ip %>
+
 <script>
+
 // Show networking inputs based on networking type selection
-var input_networking_show_zeroconf_fields = function() {
+function input_networking_show_zeroconf_fields() {
   document.getElementById("form_domain_name_group").style.display = "none";
   document.getElementById("form_self_hosted_dns_options_group").style.display = "none";
   document.getElementById("form_dynamic_dns_options_group").style.display = "none";
-  document.getElementById("input_domain_name").required = "";
+  document.getElementById("input_networking_dns_domain_name").required = "";
+  document.getElementById("select_dynamic_dns_provider").required = "";
   document.getElementById("input_dynamic_dns_username").required = "";
   document.getElementById("input_dynamic_dns_password").required = "";
 };
-var input_networking_show_self_hosted_dns_fields = function() {
+function input_networking_show_self_hosted_dns_fields() {
   document.getElementById("form_domain_name_group").style.display = "block";
   document.getElementById("form_self_hosted_dns_options_group").style.display = "block";
   document.getElementById("form_dynamic_dns_options_group").style.display = "none";
-  document.getElementById("input_domain_name").required = "required";
+  document.getElementById("input_networking_dns_domain_name").required = "required";
+  document.getElementById("select_dynamic_dns_provider").required = "required";
   document.getElementById("input_dynamic_dns_username").required = "";
   document.getElementById("input_dynamic_dns_password").required = "";
 };
-var input_networking_show_external_dns_fields = function() {
+function input_networking_show_external_dns_fields() {
   document.getElementById("form_domain_name_group").style.display = "block";
   document.getElementById("form_self_hosted_dns_options_group").style.display = "none";
   document.getElementById("form_dynamic_dns_options_group").style.display = "none";
-  document.getElementById("input_domain_name").required = "required";
+  document.getElementById("input_networking_dns_domain_name").required = "required";
+  document.getElementById("select_dynamic_dns_provider").required = "required";
   document.getElementById("input_dynamic_dns_username").required = "";
   document.getElementById("input_dynamic_dns_password").required = "";
 };
-var input_networking_show_dynamic_dns_fields = function() {
+function input_networking_show_dynamic_dns_fields() {
   document.getElementById("form_domain_name_group").style.display = "block";
   document.getElementById("form_self_hosted_dns_options_group").style.display = "none";
   document.getElementById("form_dynamic_dns_options_group").style.display = "block";
-  document.getElementById("input_domain_name").required = "required";
+  document.getElementById("input_networking_dns_domain_name").required = "required";
+  document.getElementById("select_dynamic_dns_provider").required = "required";
   document.getElementById("input_dynamic_dns_username").required = "required";
   document.getElementById("input_dynamic_dns_password").required = "required";
 };
@@ -180,7 +199,7 @@ if ( document.getElementById("input_networking_external_dns").checked ) { input_
 if ( document.getElementById("input_networking_dynamic_dns").checked ) { input_networking_show_dynamic_dns_fields() };
 
 // Custom input validation
-var validate_passwords_match = function() {
+function validate_passwords_match() {
   if ( document.getElementById("input_admin_password_confirmation").value !== '' &&
        document.getElementById("input_admin_password").value !== document.getElementById("input_admin_password_confirmation").value ) {
     document.getElementById("input_admin_password_confirmation").setCustomValidity('Passwords must match.');
@@ -223,18 +242,94 @@ for (var opt, j = 0; opt = opts[j]; j++) {
   }
 }
 
-// Show help
-var hints_hidden = function() {
-  return window.getComputedStyle(document.getElementsByTagName('hint')[0], null).display == 'none';
-};
-var set_hints_display = function(display_state) {
-  var hints = document.getElementsByTagName('hint')
-  for (var i = 0; i < hints.length; i++) {
-    hints[i].style.display = display_state;
+// Navigate steps
+function doStep1NextButton () {
+  if ( step1IsValid() ) {
+    document.getElementById("step1").setAttribute("style", "display: none;");
+    document.getElementById("step2").setAttribute("style", "display: inline-block;");
   };
 };
-document.getElementById("toggle_hints").addEventListener("click", function() {
-  if (hints_hidden()) { set_hints_display('block') } else { set_hints_display('none') };
-});
+
+function doStep2NextButton () {
+   document.getElementById("step2").setAttribute("style", "display: none;");
+   document.getElementById("step3").setAttribute("style", "display: inline-block;");
+};
+
+function doStep3NextButton () {
+  if ( step3IsValid() ) {
+    document.getElementById("step3").setAttribute("style", "display: none;");
+    document.getElementById("step4").setAttribute("style", "display: inline-block;");
+  };
+};
+
+function step1IsValid() {
+  return checkValidityFor("input_admin_password", "Password must be at least 6 characters.") &&
+    checkValidityFor("input_admin_password_confirmation", "Passwords must match.");
+};
+
+function step3IsValid() {
+  return checkValidityFor("input_networking_hostname", "Hostname is required.") &&
+    checkValidityFor("input_networking_dns_domain_name", "Must be a valid domain name.") &&
+    checkValidityFor("select_dynamic_dns_provider", "Select a dynamic DNS provider.") &&
+    checkValidityFor("input_dynamic_dns_username", "Username required for dynamic DNS provider.") &&
+    checkValidityFor("input_dynamic_dns_password", "Password required for dynamic DNS provider.");
+};
+
+function doStep4NextButton () {
+  if ( !step1IsValid() ) { backToStep1() } else
+  // Step 2 is always valid!  if ( !step2IsValid() ) { backToStep2() } else
+  if ( !step3IsValid() ) { backToStep3() } else
+  if ( step4IsValid() ) { document.getElementById("setup_form").submit(); };
+};
+
+function step4IsValid() {
+  return checkValidityFor("input_ssl_ssl_person_name", "Person's name is required.") &&
+    checkValidityFor("input_ssl_ssl_email", "Must be a valid email address.") &&
+    checkValidityFor("input_ssl_ssl_organisation_name", "Organisation is required.") &&
+    checkValidityFor("input_ssl_ssl_city", "City is required.") &&
+    checkValidityFor("input_ssl_ssl_state", "State is required.") &&
+    checkValidityFor("select_ssl_ssl_country", "Country is required.");
+};
+
+function backToStep1() {
+  document.getElementById("step1").setAttribute("style", "display: inline-block;");
+  document.getElementById("step2").setAttribute("style", "display: none;");
+  document.getElementById("step3").setAttribute("style", "display: none;");
+  document.getElementById("step4").setAttribute("style", "display: none;");
+  step1IsValid(); // check validity on back button to show validation errors
+};
+
+function backToStep2() {
+  document.getElementById("step1").setAttribute("style", "display: none;");
+  document.getElementById("step2").setAttribute("style", "display: inline-block;");
+  document.getElementById("step3").setAttribute("style", "display: none;");
+  document.getElementById("step4").setAttribute("style", "display: none;");
+  // step2IsValid()   step 2 always valid
+};
+
+function backToStep3() {
+  document.getElementById("step1").setAttribute("style", "display: none;");
+  document.getElementById("step2").setAttribute("style", "display: none;");
+  document.getElementById("step3").setAttribute("style", "display: inline-block;");
+  document.getElementById("step4").setAttribute("style", "display: none;");
+  step3IsValid()
+};
+
+function checkValidityFor ( inpuId, errorMessage ) {
+  var hasFormValidation = typeof document.createElement( 'input' ).checkValidity == 'function';
+  if ( document.getElementById(inpuId).checkValidity() ) {
+    return true;
+  } else {
+    if ( hasFormValidation ) {
+      document.getElementById(inpuId).reportValidity();
+    } else {
+      // debugger;
+      alert(errorMessage);
+      document.getElementById(inpuId).focus();
+    };
+    return false;
+  };
+};
+
 
 </script>

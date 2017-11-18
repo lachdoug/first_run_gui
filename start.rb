@@ -1,24 +1,27 @@
 require 'sinatra'
 require 'rest-client'
 require 'json'
+require "resolv"
 
 get '/' do
+  # @public_ip = Resolv.getaddress('publichost.engines.internal')
   @default_hostname = ENV['HOSTNAME'] || 'engines'
   erb :form, layout: :layout
 end
 
 post '/submit' do
-  if post_first_run_params
-    redirect "/wait?local_mgmt=#{form_strong_params[:local_mgmt]}"
+  if true || post_first_run_params
+    redirect "/complete?local_mgmt=#{form_strong_params[:local_mgmt]}"
   else
     erb :error, layout: :layout
   end
 end
 
-get '/wait' do
+get '/complete' do
   @local_mgmt = complete_strong_params[:local_mgmt]
   @mgmt_url = mgmt_url
-  erb :wait, layout: :layout
+  @polling_ip = Resolv.getaddress('publichost.engines.internal')
+  erb :complete, layout: :layout
 end
 
 get '/complete' do
@@ -31,8 +34,8 @@ end
 
 def form_strong_params
   { admin_password: params[:admin_password].to_s,
-    admin_password_confirmation: params[:admin_password_confirmation].to_s,
-    admin_email: params[:admin_email].to_s,
+    # admin_password_confirmation: params[:admin_password_confirmation].to_s,
+    # admin_email: params[:admin_email].to_s,
     timezone: params[:timezone].to_s,
     country: params[:country].to_s,
     language: params[:language].to_s,
@@ -44,6 +47,7 @@ def form_strong_params
     dynamic_dns_provider: ( params[:dynamic_dns_provider].to_s if params[:networking] == 'dynamic_dns' ),
     dynamic_dns_username: ( params[:dynamic_dns_username].to_s if params[:networking] == 'dynamic_dns' ),
     dynamic_dns_password: ( params[:dynamic_dns_password].to_s if params[:networking] == 'dynamic_dns' ),
+    ssl_email: params[:ssl_email].to_s,
     ssl_person_name: params[:ssl_person_name].to_s,
     ssl_organisation_name: params[:ssl_organisation_name].to_s,
     ssl_city: params[:ssl_city].to_s,
