@@ -11,17 +11,17 @@ end
 
 post '/submit' do
   if true || post_first_run_params
-    redirect "/complete?local_mgmt=#{form_strong_params[:local_mgmt]}"
+    redirect "/setup?local_mgmt=#{form_strong_params[:local_mgmt]}"
   else
     erb :error, layout: :layout
   end
 end
 
-get '/complete' do
-  @local_mgmt = complete_strong_params[:local_mgmt]
+get '/setup' do
+  @local_mgmt = params[:local_mgmt].to_s == 'true'
   @mgmt_url = mgmt_url
   @polling_ip = polling_ip
-  erb :complete, layout: :layout
+  erb :setup, layout: :layout
 end
 
 get '/complete' do
@@ -34,8 +34,8 @@ end
 
 def polling_ip
   Resolv.getaddress('publichost.engines.internal')
-rescue
-  nil
+# rescue
+#   nil
 end
 
 def form_strong_params
@@ -61,13 +61,13 @@ def form_strong_params
     ssl_country: params[:ssl_country].to_s }
 end
 
-def complete_strong_params
-  { local_mgmt: params[:local_mgmt].to_s == 'true' }
-end
+# def setup_strong_params
+#   { local_mgmt: params[:local_mgmt].to_s == 'true' }
+# end
 
 def post_first_run_params
   log "Post submit first run to #{api_url}v0/system/do_first_run with api_vars: #{{api_vars: form_strong_params}}"
-  result = RestClient.post( "#{api_url}v0/system/do_first_run", {api_vars: form_strong_params}.to_json, { content_type: :json } )
+  result = RestClient.post( "#{api_url}v0/system/do_first_run", {api_vars: form_strong_params}, { content_type: :json } )
   log "Submit first run result: #{result}"
   result == 'true'
 rescue => e
@@ -77,7 +77,7 @@ end
 
 def post_complete
   log "Post complete first run to #{api_url}v0/unauthenticated/bootstrap/first_run/complete"
-  result = RestClient.post( "#{api_url}v0/unauthenticated/bootstrap/first_run/complete", {api_vars: complete_strong_params}.to_json, { content_type: :json } )
+  result = RestClient.post( "#{api_url}v0/unauthenticated/bootstrap/first_run/complete", {}, { content_type: :json } )
   log "Post complete first run result: #{result}"
   log "Post complete first run result class: #{result.class}"
   log "Post complete first run result body: #{result.body}"
@@ -90,17 +90,15 @@ rescue => e
 end
 
 def mgmt_url
-  log "Get mgmt_url from #{api_url}v0/unauthenticated/bootstrap/mgmt/url"
-  result = RestClient.get( "#{api_url}v0/unauthenticated/bootstrap/mgmt/url" )
-  log "Get mgmt_url result: #{result}"
-  result
-rescue => e
-  log "System URL error:  #{e.inspect}"
-  'Error getting mgmt URL'
+  # @mgmt_url ||=
+  RestClient.get( "#{api_url}v0/unauthenticated/bootstrap/mgmt/url" )
+# rescue => e
+#   log "System URL error:  #{e.inspect}"
+#   'Error getting mgmt URL'
 end
 
 def api_url
-  ENV['SYSTEM_API_URL'] || "http://127.0.0.1:2380/"
+  ENV['SYSTEM_API_URL'] # || "http://127.0.0.1:2380/"
 end
 
 def log(message)

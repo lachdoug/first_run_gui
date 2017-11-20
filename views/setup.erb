@@ -51,7 +51,7 @@ var ajaxCall = function (type, URL, successFunc, errorFunc) {
   var ajaxRequest = new XMLHttpRequest();
   ajaxRequest.open(type, URL, true);
   ajaxRequest.onreadystatechange = function (e) {
-    debugger;
+    // debugger;
     if (ajaxRequest.readyState == 4) {
       if (ajaxRequest.status == 200) {
         successFunc(e);
