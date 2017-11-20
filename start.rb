@@ -4,13 +4,12 @@ require 'json'
 require "resolv"
 
 get '/' do
-  # @public_ip = Resolv.getaddress('publichost.engines.internal')
   @default_hostname = ENV['HOSTNAME'] || 'engines'
   erb :form, layout: :layout
 end
 
 post '/submit' do
-  if true || post_first_run_params
+  if post_first_run_params
     redirect "/setup?local_mgmt=#{form_strong_params[:local_mgmt]}"
   else
     erb :error, layout: :layout
@@ -26,16 +25,10 @@ end
 
 get '/complete' do
   if post_complete
-    sleep 10
+    status 200
   else
     status 400
   end
-end
-
-def polling_ip
-  Resolv.getaddress('publichost.engines.internal')
-# rescue
-#   nil
 end
 
 def form_strong_params
@@ -92,9 +85,16 @@ end
 def mgmt_url
   # @mgmt_url ||=
   RestClient.get( "#{api_url}v0/unauthenticated/bootstrap/mgmt/url" )
-# rescue => e
-#   log "System URL error:  #{e.inspect}"
-#   'Error getting mgmt URL'
+rescue => e
+  log "Get system URL error:  #{e.inspect}"
+  nil
+end
+
+def polling_ip
+  Resolv.getaddress('publichost.engines.internal')
+rescue => e
+  log "Get polling IP error:  #{e.inspect}"
+  nil
 end
 
 def api_url
