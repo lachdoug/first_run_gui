@@ -20,7 +20,7 @@ end
 get '/complete' do
   @local_mgmt = complete_strong_params[:local_mgmt]
   @mgmt_url = mgmt_url
-  @polling_ip = Resolv.getaddress('publichost.engines.internal')
+  @polling_ip = polling_ip
   erb :complete, layout: :layout
 end
 
@@ -30,6 +30,12 @@ get '/complete' do
   else
     status 400
   end
+end
+
+def polling_ip
+  Resolv.getaddress('publichost.engines.internal')
+rescue
+  nil
 end
 
 def form_strong_params

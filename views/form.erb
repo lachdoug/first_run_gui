@@ -166,7 +166,7 @@ function input_networking_show_self_hosted_dns_fields() {
   document.getElementById("form_self_hosted_dns_options_group").style.display = "block";
   document.getElementById("form_dynamic_dns_options_group").style.display = "none";
   document.getElementById("input_networking_dns_domain_name").required = "required";
-  document.getElementById("select_dynamic_dns_provider").required = "required";
+  document.getElementById("select_dynamic_dns_provider").required = "";
   document.getElementById("input_dynamic_dns_username").required = "";
   document.getElementById("input_dynamic_dns_password").required = "";
 };
@@ -175,7 +175,7 @@ function input_networking_show_external_dns_fields() {
   document.getElementById("form_self_hosted_dns_options_group").style.display = "none";
   document.getElementById("form_dynamic_dns_options_group").style.display = "none";
   document.getElementById("input_networking_dns_domain_name").required = "required";
-  document.getElementById("select_dynamic_dns_provider").required = "required";
+  document.getElementById("select_dynamic_dns_provider").required = "";
   document.getElementById("input_dynamic_dns_username").required = "";
   document.getElementById("input_dynamic_dns_password").required = "";
 };
