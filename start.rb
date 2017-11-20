@@ -67,7 +67,7 @@ end
 
 def post_first_run_params
   log "Post submit first run to #{api_url}v0/system/do_first_run with api_vars: #{{api_vars: form_strong_params}}"
-  result = RestClient.post( "#{api_url}v0/system/do_first_run", {api_vars: form_strong_params}, { content_type: :json } )
+  result = RestClient.post( "#{api_url}v0/system/do_first_run", {api_vars: form_strong_params}.to_json, { content_type: :json } )
   log "Submit first run result: #{result}"
   result == 'true'
 rescue => e
@@ -77,7 +77,7 @@ end
 
 def post_complete
   log "Post complete first run to #{api_url}v0/unauthenticated/bootstrap/first_run/complete"
-  result = RestClient.post( "#{api_url}v0/unauthenticated/bootstrap/first_run/complete", {}, { content_type: :json } )
+  result = RestClient.post( "#{api_url}v0/unauthenticated/bootstrap/first_run/complete", {api_vars: { local_mgmt: params[:local_mgmt].to_s == 'true' } }.to_json, { content_type: :json } )
   log "Post complete first run result: #{result}"
   log "Post complete first run result class: #{result.class}"
   log "Post complete first run result body: #{result.body}"
